@@ -24,5 +24,5 @@
 
 ## 🔗 相关项目
 
-- [AI 副业工具箱](https://www.duckdblab.com) — AI 工具评测
+- [AI 副业工具箱](https://www.duckdblab.com) | [DuckDB Lab Blog](https://duckdblab.org) — AI 工具评测
 - [AI Toolkit](https://198007.xyz) — 在线工具集
