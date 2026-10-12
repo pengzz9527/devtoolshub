@@ -1,0 +1,112 @@
+📊 DuckDB 实战笔记 ｜ 2026-09-24
+
+> 每天一个 DuckDB 实战技巧，让你立刻能用。
+
+---
+
+## 🔥 今日话题：MERGE INTO — 增量更新数据的一站式方案
+
+你有没有遇到过这种场景：
+
+> 每天从上游拿到一份新的用户数据，需要把新增用户插入、已有用户更新、删掉不存在的用户。用 Python 写？先查现有数据、再比对差异、然后分别执行 INSERT/UPDATE/DELETE……代码五十行起步，还容易漏边界情况。
+
+**这是 ETL 中最常见的「Upsert」需求。**
+
+传统做法要三张表来回 JOIN，逻辑复杂、容易出错。DuckDB 用一条 `MERGE INTO` 语句搞定所有操作——插入、更新、删除一步到位。
+
+---
+
+## 📋 场景一：基础 UPSERT
+
+```sql
+-- 目标表
+CREATE TABLE users AS SELECT * FROM (VALUES
+    (1, 'Alice', 'alice@email.com', '2024-01-01'),
+    (2, 'Bob',   'bob@email.com',   '2024-01-01'),
+    (3, 'Carol', 'carol@email.com', '2024-01-01')
+) t(user_id, name, email, updated_at);
+
+-- 今天的增量数据
+CREATE TABLE daily_users AS SELECT * FROM (VALUES
+    (2, 'Bob_Jr', 'bob_new@email.com', '2024-09-24'),
+    (4, 'Dave',   'dave@email.com',  '2024-09-24'),
+    (1, 'Alice',  'alice_v2@email.com', '2024-09-24')
+) t(user_id, name, email, updated_at);
+
+-- 一条 MERGE 搞定
+MERGE INTO users AS target
+USING daily_users AS source
+ON target.user_id = source.user_id
+WHEN MATCHED THEN
+    UPDATE SET name = source.name, email = source.email, updated_at = source.updated_at
+WHEN NOT MATCHED THEN
+    INSERT (user_id, name, email, updated_at)
+    VALUES (source.user_id, source.name, source.email, source.updated_at);
+```
+
+✅ user_id=1,2 被**更新** | ✅ user_id=4 被**插入** | ✅ user_id=3 保持不变
+
+---
+
+## 📋 场景二：智能更新（空值不覆盖）
+
+```sql
+MERGE INTO users AS target
+USING daily_users AS source
+ON target.user_id = source.user_id
+WHEN MATCHED THEN
+    UPDATE SET
+        name       = COALESCE(source.name, target.name),
+        email      = COALESCE(source.email, target.email),
+        updated_at = source.updated_at
+WHEN NOT MATCHED THEN
+    INSERT * FROM source;
+```
+
+`COALESCE` 让新数据的空值不覆盖旧值，避免脏数据破坏已有信息。
+
+---
+
+## 📋 场景三：带软删除的全量同步
+
+```sql
+MERGE INTO users AS target
+USING daily_users AS source
+ON target.user_id = source.user_id
+WHEN MATCHED THEN
+    UPDATE SET name = source.name, email = source.email, updated_at = source.updated_at
+WHEN NOT MATCHED THEN
+    INSERT (user_id, name, email, updated_at)
+    VALUES (source.user_id, source.name, source.email, source.updated_at)
+WHEN NOT MATCHED BY SOURCE AND is_deleted = FALSE THEN
+    UPDATE SET is_deleted = TRUE, updated_at = CURRENT_DATE;
+```
+
+三向匹配：源中有目标也有 → 更新；源有目标无 → 插入；源无目标有 → 软删除。
+
+---
+
+## 💡 常见陷阱
+
+⚠️ **没索引会慢**：ON 条件字段务必建索引，否则全表扫描
+⚠️ **NOT MATCHED BY SOURCE 要小心**：不加过滤条件会误删历史归档数据
+⚠️ **原子性**：MERGE 是事务操作，失败会自动回滚，不用手动处理
+
+---
+
+## 📝 小结
+
+| 技巧 | 用法 |
+|------|------|
+| 基础 UPSERT | MERGE INTO + WHEN MATCHED/NOT MATCHED |
+| 条件过滤更新 | WHEN MATCHED AND 条件 THEN |
+| 反向软删除 | WHEN NOT MATCHED BY SOURCE THEN |
+| 智能更新 | COALESCE(source.col, target.col) |
+| 简写语法 | INSERT...ON CONFLICT (适合纯更新) |
+
+**一条 MERGE INTO，替代五十行 Python 比对代码。**
+
+---
+
+📌 收藏这条笔记，下次做数据同步时直接回来参考。
+🔍 想系统学习 DuckDB？[duckdblab.org](https://duckdblab.org)
