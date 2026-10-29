@@ -140,6 +140,20 @@
       "zh_category": "数据库",
       "status": "published",
       "publish_date": "2026-06-20"
+    },
+    {
+      "id": 14,
+      "slug": "frontend-framework-comparison",
+      "en_title": "React vs Vue vs Svelte vs Angular: Frontend Framework Comparison (2026)",
+      "zh_title": "React vs Vue vs Svelte vs Angular：前端框架对比（2026）",
+      "en_description": "Compare React, Vue, Svelte, and Angular for modern frontend development. Performance, ecosystem, learning curve, and which to choose.",
+      "zh_description": "对比 React、Vue、Svelte 和 Angular 四大前端框架。性能、生态、学习曲线与选型建议。",
+      "en_tags": ["Frontend", "React", "Vue", "Svelte", "Angular", "JavaScript", "Comparison"],
+      "zh_tags": ["前端", "React", "Vue", "Svelte", "Angular", "JavaScript", "对比"],
+      "en_category": "Web Development",
+      "zh_category": "Web开发",
+      "status": "published",
+      "publish_date": "2026-10-29"
     }
   ]
 }
