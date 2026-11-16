@@ -154,6 +154,20 @@
       "zh_category": "Web开发",
       "status": "published",
       "publish_date": "2026-10-29"
+    },
+    {
+      "id": 15,
+      "slug": "package-manager-comparison",
+      "en_title": "pnpm vs npm vs Yarn vs Bun: JavaScript Package Manager Comparison (2026)",
+      "zh_title": "pnpm vs npm vs Yarn vs Bun：JavaScript 包管理器对比（2026）",
+      "en_description": "Compare pnpm, npm, Yarn, and Bun package managers with real install benchmarks: cold-cache times, disk usage, lockfile formats, workspaces, and pricing.",
+      "zh_description": "对比 pnpm、npm、Yarn 和 Bun 四大 JavaScript 包管理器，附真实安装基准测试：冷/热缓存耗时、磁盘占用、锁文件格式、Monorepo 支持与价格。",
+      "en_tags": ["JavaScript", "pnpm", "npm", "Yarn", "Bun", "Package Manager", "Comparison"],
+      "zh_tags": ["JavaScript", "pnpm", "npm", "Yarn", "Bun", "包管理器", "对比"],
+      "en_category": "Web Development",
+      "zh_category": "Web开发",
+      "status": "published",
+      "publish_date": "2026-11-12"
     }
   ]
 }
