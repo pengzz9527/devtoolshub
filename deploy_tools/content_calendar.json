@@ -168,6 +168,20 @@
       "zh_category": "Web开发",
       "status": "published",
       "publish_date": "2026-11-12"
+    },
+    {
+      "id": 16,
+      "slug": "vector-database-comparison",
+      "en_title": "Pinecone vs Qdrant vs Weaviate vs Milvus: Vector Database Comparison (2026)",
+      "zh_title": "Pinecone vs Qdrant vs Weaviate vs Milvus：向量数据库对比（2026）",
+      "en_description": "Compare Pinecone, Qdrant, Weaviate, and Milvus vector databases for RAG and semantic search. Features, pricing, performance benchmarks, and which to choose in 2026.",
+      "zh_description": "对比 Pinecone、Qdrant、Weaviate 和 Milvus 四大向量数据库。功能、价格、性能基准与选型建议。",
+      "en_tags": ["Vector Database", "Pinecone", "Qdrant", "Weaviate", "Milvus", "RAG", "AI", "Comparison"],
+      "zh_tags": ["向量数据库", "Pinecone", "Qdrant", "Weaviate", "Milvus", "RAG", "AI", "对比"],
+      "en_category": "Databases",
+      "zh_category": "数据库",
+      "status": "published",
+      "publish_date": "2026-11-17"
     }
   ]
 }
